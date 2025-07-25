@@ -113,10 +113,10 @@ jobs:
       uses: taiki-e/cache-cargo-install-action@v2
       with:
         tool: cargo-packager
-    - name: Install cargo-ohrs
+    - name: Install cargo ohrs
       uses: taiki-e/cache-cargo-install-action@v2
       with:
-        tool: cargo-ohrs
+        tool: ohrs
     - name: Install Rust Toolchains
       run: |
         rustup target add --toolchain nightly $(echo "$targets" | tr '\n' ' ')
