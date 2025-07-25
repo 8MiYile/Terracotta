@@ -55,9 +55,9 @@ jobs:
         mv ohos-sdk-new ohos-sdk
         export OHOS_SDK_HOME=$HOME/ohos-sdk
         
-        mkdir -p $OHOS_NDK_HOME/native/llvm
+        sudo mkdir -p $OHOS_NDK_HOME/native/llvm
 
-        tee $OHOS_NDK_HOME/native/llvm/aarch64-unknown-linux-ohos-clang.sh > /dev/null <<'EOF'
+        sudo tee $OHOS_NDK_HOME/native/llvm/aarch64-unknown-linux-ohos-clang.sh > /dev/null <<'EOF'
         #!/bin/sh
         exec $OHOS_NDK_HOME/native/llvm/bin/clang \
           -target aarch64-linux-ohos \
@@ -67,7 +67,7 @@ jobs:
         EOF
         sudo chmod +x $OHOS_NDK_HOME/native/llvm/aarch64-unknown-linux-ohos-clang.sh
 
-        tee $OHOS_NDK_HOME/native/llvm/x86_64-unknown-linux-ohos-clang.sh > /dev/null <<'EOF'
+        sudo tee $OHOS_NDK_HOME/native/llvm/x86_64-unknown-linux-ohos-clang.sh > /dev/null <<'EOF'
         #!/bin/sh
         exec $OHOS_NDK_HOME/native/llvm/bin/clang \
           -target x86_64-linux-ohos \
