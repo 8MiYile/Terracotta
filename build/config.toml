@@ -6,3 +6,23 @@ rustflags = [
   "-C", "target-feature=+crt-static",
   "-C", "link-args=-Wl",
 ]
+
+[target.aarch64-unknown-linux-ohos]
+ar = "/usr/local/ohos-sdk/linux/native/llvm/bin/llvm-ar"
+linker = "/home/runner/ohos-sdk/native/llvm/aarch64-unknown-linux-ohos-clang.sh"
+
+[target.aarch64-unknown-linux-ohos.env]
+PKG_CONFIG_PATH = "/usr/local/ohos-sdk/linux/native/sysroot/usr/lib/pkgconfig:/usr/local/ohos-sdk/linux/native/sysroot/usr/local/lib/pkgconfig"
+PKG_CONFIG_LIBDIR = "/usr/local/ohos-sdk/linux/native/sysroot/usr/lib:/usr/local/ohos-sdk/linux/native/sysroot/usr/local/lib"
+PKG_CONFIG_SYSROOT_DIR = "/usr/local/ohos-sdk/linux/native/sysroot"
+SYSROOT = "/usr/local/ohos-sdk/linux/native/sysroot"
+
+[target.x86_64-unknown-linux-ohos]
+ar = "/usr/local/ohos-sdk/linux/native/llvm/bin/llvm-ar"
+linker = "/home/runner/ohos-sdk/native/llvm/x86_64-unknown-linux-ohos-clang.sh"
+
+[target.x86_64-unknown-linux-ohos.env]
+PKG_CONFIG_PATH = "/usr/local/ohos-sdk/linux/native/sysroot/usr/lib/pkgconfig:/usr/local/ohos-sdk/linux/native/sysroot/usr/local/lib/pkgconfig"
+PKG_CONFIG_LIBDIR = "/usr/local/ohos-sdk/linux/native/sysroot/usr/lib:/usr/local/ohos-sdk/linux/native/sysroot/usr/local/lib"
+PKG_CONFIG_SYSROOT_DIR = "/usr/local/ohos-sdk/linux/native/sysroot"
+SYSROOT = "/usr/local/ohos-sdk/linux/native/sysroot"

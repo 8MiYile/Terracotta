@@ -19,6 +19,8 @@ env:
     aarch64-unknown-linux-gnu
     x86_64-apple-darwin
     aarch64-apple-darwin
+    aarch64-unknown-linux-ohos
+    x86_64-unknown-linux-ohos
 
 jobs:
   build-executable:
@@ -33,6 +35,48 @@ jobs:
       run: |
         sudo apt update
         sudo apt install --yes --no-install-recommends build-essential llvm-18 clang-18
+    - name: Install Cross Compilers (OpenHarmony)
+      working-directory: ../../../
+      run: |
+        echo $PWD
+        wget -q \
+          https://github.com/openharmony-rs/ohos-sdk/releases/download/v5.1.0/ohos-sdk-windows_linux-public.tar.gz.aa
+        wget -q \
+          https://github.com/openharmony-rs/ohos-sdk/releases/download/v5.1.0/ohos-sdk-windows_linux-public.tar.gz.ab
+        cat ohos-sdk-windows_linux-public.tar.gz.aa ohos-sdk-windows_linux-public.tar.gz.ab > sdk.tar.gz
+        echo "Extracting native..."
+        mkdir sdk
+        tar -xzf sdk.tar.gz ohos-sdk/linux/native-linux-x64-5.1.0.107-Release.zip
+        tar -xzf sdk.tar.gz ohos-sdk/linux/toolchains-linux-x64-5.1.0.107-Release.zip
+        unzip -qq ohos-sdk/linux/native-linux-x64-5.1.0.107-Release.zip -d ohos-sdk-new
+        unzip -qq ohos-sdk/linux/toolchains-linux-x64-5.1.0.107-Release.zip -d ohos-sdk-new
+        ls -la ohos-sdk-new/native/llvm/bin/
+        rm -rf ohos-sdk-windows_linux-public.tar.gz.aa ohos-sdk-windows_linux-public.tar.gz.ab ohos-sdk/
+        mv ohos-sdk-new ohos-sdk
+        export OHOS_SDK_HOME=$HOME/ohos-sdk
+        
+        mkdir -p $OHOS_NDK_HOME/native/llvm
+
+        tee $OHOS_NDK_HOME/native/llvm/aarch64-unknown-linux-ohos-clang.sh > /dev/null <<'EOF'
+        #!/bin/sh
+        exec $OHOS_NDK_HOME/native/llvm/bin/clang \
+          -target aarch64-linux-ohos \
+          --sysroot=$OHOS_NDK_HOME/native/sysroot \
+          -D__MUSL__ \
+          "$@"
+        EOF
+        sudo chmod +x $OHOS_NDK_HOME/native/llvm/aarch64-unknown-linux-ohos-clang.sh
+
+        tee $OHOS_NDK_HOME/native/llvm/x86_64-unknown-linux-ohos-clang.sh > /dev/null <<'EOF'
+        #!/bin/sh
+        exec $OHOS_NDK_HOME/native/llvm/bin/clang \
+          -target x86_64-linux-ohos \
+          --sysroot=$OHOS_NDK_HOME/native/sysroot \
+          -D__MUSL__ \
+          "$@"
+        EOF
+        sudo chmod +x $OHOS_NDK_HOME/native/llvm/x86_64-unknown-linux-ohos-clang.sh
+
     - name: Install Cross Compliers (MacOS)
       uses: 8Mi-Tech/setup-osx-cross@6b7954cec12f774c2ff02b2a7596ec6791a39ed5
       with:
@@ -69,6 +113,10 @@ jobs:
       uses: taiki-e/cache-cargo-install-action@v2
       with:
         tool: cargo-packager
+    - name: Install cargo-ohrs
+      uses: taiki-e/cache-cargo-install-action@v2
+      with:
+        tool: cargo-ohrs
     - name: Install Rust Toolchains
       run: |
         rustup target add --toolchain nightly $(echo "$targets" | tr '\n' ' ')
