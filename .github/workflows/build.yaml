@@ -55,28 +55,29 @@ jobs:
         mv ohos-sdk-new ohos-sdk
         export OHOS_SDK_HOME=$HOME/ohos-sdk
         
-        sudo mkdir -p $OHOS_NDK_HOME/native/llvm
+        sudo mkdir -p $OHOS_SDK_HOME/native/llvm
 
-        sudo tee $OHOS_NDK_HOME/native/llvm/aarch64-unknown-linux-ohos-clang.sh > /dev/null <<'EOF'
+        sudo tee $OHOS_SDK_HOME/native/llvm/aarch64-unknown-linux-ohos-clang.sh > /dev/null <<'EOF'
         #!/bin/sh
-        exec $OHOS_NDK_HOME/native/llvm/bin/clang \
+        exec $OHOS_SDK_HOME/native/llvm/bin/clang \
           -target aarch64-linux-ohos \
-          --sysroot=$OHOS_NDK_HOME/native/sysroot \
+          --sysroot=$OHOS_SDK_HOME/native/sysroot \
           -D__MUSL__ \
           "$@"
         EOF
-        sudo chmod +x $OHOS_NDK_HOME/native/llvm/aarch64-unknown-linux-ohos-clang.sh
+        sudo chmod +x $OHOS_SDK_HOME/native/llvm/aarch64-unknown-linux-ohos-clang.sh
 
-        sudo tee $OHOS_NDK_HOME/native/llvm/x86_64-unknown-linux-ohos-clang.sh > /dev/null <<'EOF'
+        sudo tee $OHOS_SDK_HOME/native/llvm/x86_64-unknown-linux-ohos-clang.sh > /dev/null <<'EOF'
         #!/bin/sh
-        exec $OHOS_NDK_HOME/native/llvm/bin/clang \
+        exec $OHOS_SDK_HOME/native/llvm/bin/clang \
           -target x86_64-linux-ohos \
-          --sysroot=$OHOS_NDK_HOME/native/sysroot \
+          --sysroot=$OHOS_SDK_HOME/native/sysroot \
           -D__MUSL__ \
           "$@"
         EOF
-        sudo chmod +x $OHOS_NDK_HOME/native/llvm/x86_64-unknown-linux-ohos-clang.sh
+        sudo chmod +x $OHOS_SDK_HOME/native/llvm/x86_64-unknown-linux-ohos-clang.sh
 
+        echo "OHOS_NDK_HOME=$HOME/ohos-sdk" >> $GITHUB_ENV
     - name: Install Cross Compliers (MacOS)
       uses: 8Mi-Tech/setup-osx-cross@6b7954cec12f774c2ff02b2a7596ec6791a39ed5
       with:
